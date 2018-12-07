@@ -22,9 +22,9 @@ class Graph:
             line = fp.readline()
             while (line):
                     nodos = line.split()
-                    self.data.at[cont-1,'origem'] = nodos[0]
-                    self.data.at[cont-1,'destino'] = nodos[1]
-                    self.data.at[cont-1,'distancia'] = nodos[2]
+                    self.data.at[cont-1,'ORIGEM'] = nodos[0]
+                    self.data.at[cont-1,'DESTINO'] = nodos[1]
+                    self.data.at[cont-1,'DISTANCIA'] = nodos[2]
                     cont +=1
                     line = fp.readline()
                     
@@ -71,17 +71,20 @@ class Graph:
         
             for i in range(len(distancias)):
                 destino_iterativo = self.nodos[i]
-
-                #tabela_distancia eh dataframe com NaNs (se não tiver distancia) ou NaNs e valor de distancia (se tiver)
-                tabela_distancia = self.data['DESTINO'].where(self.data['ORIGEM'] == nodo_atual and self.data['DESTINO'] == destino_iterativo)
-                #se tiver origem->destino no dataframe, portanto se tiver aresta
-                if (tabela_distancia.isnull().all().all() == False):
-                    #DISTANCIA É O UNICO VALOR NA TABELA_DISTANCIA (que é um series agora, pq é 1 dimensional)
-                    distancia_da_aresta = tabela_distancia.loc[s.first_valid_index()]
+                
+                #USAR for j in range (0,len(data["ORIGEM"])):
+                distancia_da_aresta = 0
+                for j in range (len(self.data["ORIGEM"])):
+                    if self.data.at[j,"ORIGEM"] == nodo_atual and self.data.at[j,"DESTINO"] == destino_iterativo:
+                        distancia_da_aresta = self.data.at[j,"DISTANCIA"]
                     
+            
+                #se tiver origem->destino no dataframe, portanto se tiver aresta
+                if (distancia_da_aresta != 0):
+
                     #tem um numero já, checar se deve atualizar (checar se distancias[i] > distancia no dataframe)                  
                     if distancias[i] != 0 and distancias[i] != inf:
-                        if (distancias[i] > distancia_da_aresta):
+                        if distancias[i] > distancia_da_aresta:
                             #atualiza
                             distancias[i] = distancia_da_aresta + shortest_path
                             
