@@ -8,7 +8,7 @@ class Graph:
         #lista de vertices
         self.nodos = []
         #dataframe com informacoes das arestas
-        columns = ['origem','destino','distancia']
+        columns = ['ORIGEM','DESTINO','DISTANCIA']
         self.data = pd.DataFrame(columns=columns)
         
     def montaGrafo(self):
@@ -58,23 +58,52 @@ class Graph:
         
         #inicializar distancias como desconhecidas
         distancias = [inf] * len(self.nodos)
+        #distancia de origem a origem é zero
         for i in range(len(self.nodos)):
             if int(self.nodos[i]) == int(self.origem):
-                #distancia de origem a origem é zero
                 distancias[i] = 0
+        #nodo_atual sera o nodo de menor distancia em cada iteracao do algoritmo
         nodo_atual = self.origem
-        #arrumar isso, botar pra funcionar com dataframe
-        #if (nodo_atual,self.destino) in self.arestas:
-        #    return self.arestas[(nodo_atual,self.destino)]
-        lista_iterativa = self.nodos.copy()
+        shortest_path_found = False
+        shortest_path = 0
+        
+        while shortest_path_found == False:
+        
+            for i in range(len(distancias)):
+                destino_iterativo = self.nodos[i]
+
+                #tabela_distancia eh dataframe com NaNs (se não tiver distancia) ou NaNs e valor de distancia (se tiver)
+                tabela_distancia = self.data['DESTINO'].where(self.data['ORIGEM'] == nodo_atual and self.data['DESTINO'] == destino_iterativo)
+                #se tiver origem->destino no dataframe, portanto se tiver aresta
+                if (tabela_distancia.isnull().all().all() == False):
+                    #DISTANCIA É O UNICO VALOR NA TABELA_DISTANCIA (que é um series agora, pq é 1 dimensional)
+                    distancia_da_aresta = tabela_distancia.loc[s.first_valid_index()]
+                    
+                    #tem um numero já, checar se deve atualizar (checar se distancias[i] > distancia no dataframe)                  
+                    if distancias[i] != 0 and distancias[i] != inf:
+                        if (distancias[i] > distancia_da_aresta):
+                            #atualiza
+                            distancias[i] = distancia_da_aresta + shortest_path
+                            
+                    #valor atual eh infinito, entao qualquer valor eh menor e pode atualizar
+                    if distancias[i] == inf:
+                        distancias[i] = distancia_da_aresta
+
+
+                    #remover do dataframe o record que foi iterados
+
+            #atualizar o nodo_atual para o nodo com menor distancia na lista
+            #atualizar shortest_path, que é menor distancia do nodo atual
+
+            #checar se deve acabar o algoritmo, vendo se nodo_atual eh self.destino
+            #se sim, shortest_path_found = True e botar distancias[i] do destino na variavel shortest_path
+            
+        #retornar shortest_path
+                
         
         
               
-        
-        
-    
-    
-    
+  
 graph = Graph("graph.txt")
 graph.montaGrafo()
 menor_caminho = graph.Djisktra()
