@@ -1,3 +1,13 @@
+'''
+Implementação do Algoritmo de Dijkstra
+
+Input: arquivo com formato correto, definido abaixo
+Formato cabeçalho: primeira linha origem e destino (dois números)
+Formato do grafo: uma aresta (direcionada) por linha, todos inteiros
+nodo_origem nodo_destino distancia (três números)
+
+Output: print listando vértices passados para o destino, assim como o valor do menor caminho
+'''
 import numpy as np
 import pandas as pd
 inf = float('inf')
@@ -5,7 +15,7 @@ inf = float('inf')
 class Graph:
     def __init__(self, graph_txt):
         self.texto = graph_txt
-        #lista de vertices
+        #lista de vertices (nodos)
         self.nodos = []
         #dataframe com informacoes das arestas
         columns = ['ORIGEM','DESTINO','DISTANCIA']
@@ -44,20 +54,16 @@ class Graph:
             
                     
                     
-    def Djisktra(self):
-        #print("\nNodos objetivo\n")
-        #print(self.objetivo)
-        print("Nodo origem: ")
-        print(self.origem)
-        print("Nodo destino: ")
-        print(self.destino)
-        print("Dataframe de arestas")
-        print(self.data)
-        print("Lista de nodos")
-        print(self.nodos)
+    def Dijkstra(self):
+        print("Nodo origem: "+self.origem)
+        print("Nodo destino: "+self.destino)
+        #print("Dataframe de arestas")
+        #print(self.data)
         
         #inicializar distancias como desconhecidas
         distancias = [inf] * len(self.nodos)
+        #array de bool que indica se nodo já foi escolhido
+        foi_escolhido = [False] * len(self.nodos)
         #distancia de origem a origem é zero
         for i in range(len(self.nodos)):
             if int(self.nodos[i]) == int(self.origem):
@@ -66,13 +72,14 @@ class Graph:
         nodo_atual = self.origem
         shortest_path_found = False
         shortest_path = 0
+        print ("Caminho percorrido")  
         
         while shortest_path_found == False:
         
+            print (nodo_atual)
             for i in range(len(distancias)):
                 destino_iterativo = self.nodos[i]
                 
-                #USAR for j in range (0,len(data["ORIGEM"])):
                 distancia_da_aresta = 0
                 for j in range (len(self.data["ORIGEM"])):
                     if self.data.at[j,"ORIGEM"] == nodo_atual and self.data.at[j,"DESTINO"] == destino_iterativo:
@@ -81,34 +88,45 @@ class Graph:
             
                 #se tiver origem->destino no dataframe, portanto se tiver aresta
                 if (distancia_da_aresta != 0):
-
                     #tem um numero já, checar se deve atualizar (checar se distancias[i] > distancia no dataframe)                  
                     if distancias[i] != 0 and distancias[i] != inf:
-                        if distancias[i] > distancia_da_aresta:
+                        if int(distancias[i]) > int(distancia_da_aresta):
                             #atualiza
-                            distancias[i] = distancia_da_aresta + shortest_path
+                            distancias[i] = int(distancia_da_aresta) + int(shortest_path)
                             
                     #valor atual eh infinito, entao qualquer valor eh menor e pode atualizar
                     if distancias[i] == inf:
-                        distancias[i] = distancia_da_aresta
+                        distancias[i] = int(distancia_da_aresta) + int(shortest_path)
 
 
-                    #remover do dataframe o record que foi iterados
+            menor_numero = -1
+            index = -1
+            for i in range(len(distancias)):
+                if distancias[i] != 0 and menor_numero == -1 and foi_escolhido[i] == False:
+                    menor_numero = distancias[i]
+                    index = i
+                elif distancias[i] != 0 and float(menor_numero) > float(distancias[i]) and foi_escolhido[i] == False:
+                    menor_numero = distancias[i]
+                    index = i
+            
+            foi_escolhido[index] = True
 
             #atualizar o nodo_atual para o nodo com menor distancia na lista
+            nodo_atual = self.nodos[index]
             #atualizar shortest_path, que é menor distancia do nodo atual
-
+            shortest_path = distancias[index]
             #checar se deve acabar o algoritmo, vendo se nodo_atual eh self.destino
-            #se sim, shortest_path_found = True e botar distancias[i] do destino na variavel shortest_path
-            
+            if int(nodo_atual) == int(self.destino):
+                shortest_path_found = True
+                print (nodo_atual)
+
         #retornar shortest_path
-                
+        return shortest_path                  
         
         
               
   
 graph = Graph("graph.txt")
 graph.montaGrafo()
-menor_caminho = graph.Djisktra()
-print ("Menor caminho:")
-print (menor_caminho)
+menor_caminho = graph.Dijkstra()
+print ("Menor caminho: " +str(menor_caminho))
