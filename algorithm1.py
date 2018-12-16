@@ -6,7 +6,7 @@ Input: arquivo com formato correto (graph_prim.txt), definido abaixo
 Formato do grafo: uma aresta (não direcionada) por linha, todos inteiros
 nodo1 nodo2 distancia (três números)
 
-Output: print listando vértices passados para o destino, assim como o valor do menor caminho
+Output: comprimento do minimum spanning tree pelo algoritmo de prim
 '''
 import numpy as np
 import pandas as pd
