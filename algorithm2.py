@@ -88,7 +88,7 @@ class Graph:
                     
             
                 #se tiver origem->destino no dataframe, portanto se tiver aresta
-                if (distancia_da_aresta != 0):
+                if distancia_da_aresta != 0:
                     #tem um numero já, checar se deve atualizar (checar se distancias[i] > distancia no dataframe)                  
                     if distancias[i] != 0 and distancias[i] != inf:
                         if int(distancias[i]) > int(distancia_da_aresta):

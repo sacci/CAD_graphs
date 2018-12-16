@@ -24,6 +24,7 @@ class Graph:
     def montaGrafo(self):
         with open(self.texto) as fp:
             line = fp.readline()
+            cont = 1
             while (line):
                     nodos = line.split()
                     self.data.at[cont-1,'ORIGEM'] = nodos[0]
@@ -58,7 +59,7 @@ class Graph:
         foi_escolhido = [False] * len(self.nodos)
         #distancia de origem a origem é zero
         for i in range(len(self.nodos)):
-            if int(self.nodos[i]) == int(self.origem):
+            if int(self.nodos[i]) == int(self.nodos[0]):
                 distancias[i] = 0
         #nodo_atual sera um dos nodos da lista de nodos origem
         nodos_origem = [self.nodos[0]]
@@ -80,7 +81,7 @@ class Graph:
                     
             
                 #se tiver origem->destino no dataframe, portanto se tiver aresta
-                if (distancia_da_aresta != 0):
+                if distancia_da_aresta != 0:
                     #tem um numero já, checar se deve atualizar (checar se distancias[i] > distancia no dataframe)                  
                     if distancias[i] != 0 and distancias[i] != inf:
                         if int(distancias[i]) > int(distancia_da_aresta):
@@ -104,17 +105,18 @@ class Graph:
             
             foi_escolhido[index] = True
 
-            #atualizar o nodo_atual para o nodo com menor distancia na lista
-            nodo_atual = self.nodos[index]
-            #atualizar shortest_path, que é menor distancia do nodo atual
-            shortest_path = distancias[index]
-            #checar se deve acabar o algoritmo, vendo se nodo_atual eh self.destino
-            if int(nodo_atual) == int(self.destino):
-                shortest_path_found = True
+            #atualizar o nodos_origem para o nodo com menor distancia na lista
+            nodos_origem.append(self.nodos[index])
+            #checar se deve acabar o algoritmo, vendo se todos nodos foram visitados
+            if len(nodos_origem) == len(self.nodos):
+                all_nodes_visited = True
                 print (nodo_atual)
 
+        menor_comprimento = 0
+        for i in range(distancias):
+            menor_comprimento = distancias[i] + menor_comprimento
         #retornar shortest_path
-        return shortest_path                  
+        return menor_comprimento                  
         
         
               
