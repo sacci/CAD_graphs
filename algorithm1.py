@@ -1,11 +1,10 @@
 '''
 Autor: Pedro Saccilotto
-Implementação do Algoritmo de Dijkstra
+Implementação do Algoritmo de Prim
 
-Input: arquivo com formato correto (graph_dijkstra.txt), definido abaixo
-Formato cabeçalho: primeira linha origem e destino (dois números)
-Formato do grafo: uma aresta (direcionada) por linha, todos inteiros
-nodo_origem nodo_destino distancia (três números)
+Input: arquivo com formato correto (graph_prim.txt), definido abaixo
+Formato do grafo: uma aresta (não direcionada) por linha, todos inteiros
+nodo1 nodo2 distancia (três números)
 
 Output: print listando vértices passados para o destino, assim como o valor do menor caminho
 '''
@@ -24,12 +23,6 @@ class Graph:
         
     def montaGrafo(self):
         with open(self.texto) as fp:
-            line = fp.readline()
-            #nodo origem
-            self.origem = line.split()[0] 
-            #nodo destino
-            self.destino = line.split()[-1] 
-            cont = 1
             line = fp.readline()
             while (line):
                     nodos = line.split()
@@ -55,9 +48,7 @@ class Graph:
             
                     
                     
-    def Dijkstra(self):
-        print("Nodo origem: "+self.origem)
-        print("Nodo destino: "+self.destino)
+    def Prim(self):
         #print("Dataframe de arestas")
         #print(self.data)
         
@@ -69,14 +60,15 @@ class Graph:
         for i in range(len(self.nodos)):
             if int(self.nodos[i]) == int(self.origem):
                 distancias[i] = 0
-        #nodo_atual sera o nodo de menor distancia em cada iteracao do algoritmo
-        nodo_atual = self.origem
-        shortest_path_found = False
-        shortest_path = 0
+        #nodo_atual sera um dos nodos da lista de nodos origem
+        nodos_origem = [self.nodos[0]]
+        nodo_atual = nodos_origem[0]
+        all_nodes_visited = False
         print ("Caminho percorrido")  
         
-        while shortest_path_found == False:
+        while all_nodes_visited == False:
         
+        #funcionamento parecido com dijkstra, a diferença é que haverá mais nodos origens ao longo da iteração... (lista de nodos visitados aumenta)
             print (nodo_atual)
             for i in range(len(distancias)):
                 destino_iterativo = self.nodos[i]
@@ -93,11 +85,11 @@ class Graph:
                     if distancias[i] != 0 and distancias[i] != inf:
                         if int(distancias[i]) > int(distancia_da_aresta):
                             #atualiza
-                            distancias[i] = int(distancia_da_aresta) + int(shortest_path)
+                            distancias[i] = int(distancia_da_aresta)
                             
                     #valor atual eh infinito, entao qualquer valor eh menor e pode atualizar
                     if distancias[i] == inf:
-                        distancias[i] = int(distancia_da_aresta) + int(shortest_path)
+                        distancias[i] = int(distancia_da_aresta)
 
 
             menor_numero = -1
@@ -127,7 +119,7 @@ class Graph:
         
               
   
-graph = Graph("graph_dijsktra.txt")
+graph = Graph("graph_prim.txt")
 graph.montaGrafo()
-menor_caminho = graph.Dijkstra()
-print ("Menor caminho: " +str(menor_caminho))
+menor_comprimento = graph.Prim()
+print ("Minimum Spanning Tree do grafo: " +str(menor_comprimento))
