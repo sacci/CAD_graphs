@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Autor: Pedro Saccilotto
 Implementação do Algoritmo de Prim
@@ -8,7 +9,7 @@ nodo1 nodo2 distancia (três números)
 
 Output: comprimento do minimum spanning tree pelo algoritmo de prim
 '''
-import numpy as np
+#import numpy as np
 import pandas as pd
 inf = float('inf')
 

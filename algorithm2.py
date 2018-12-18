@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 Autor: Pedro Saccilotto
 Implementação do Algoritmo de Dijkstra
@@ -9,7 +10,7 @@ nodo_origem nodo_destino distancia (três números)
 
 Output: print listando vértices passados para o destino, assim como o valor do menor caminho
 '''
-import numpy as np
+#import numpy as np
 import pandas as pd
 inf = float('inf')
 
